@@ -1,8 +1,21 @@
 <script setup>
-const productStore = useProductStore();
+
 const filters = computed(() => productStore.filters);
+
+const productStore = useProductStore();
+const { refresh, pending } = useAsyncData("products", async () => productStore.fetchProducts());
+
+watch(
+  () => productStore.activeFilters,
+  () => {
+    refresh();
+    console.log("I'm watching you productStore.activeFilters 👀");
+  }
+);
+
 </script>
 <template>
+  {{pending}}
   <div class="filters-wrapper flex gap-2 items-center">
     <div class="form-control">
       <label class="label" for="search">
