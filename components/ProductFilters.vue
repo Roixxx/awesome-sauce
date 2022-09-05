@@ -1,21 +1,22 @@
 <script setup>
 
+const productStore = useProductStore();
 const filters = computed(() => productStore.filters);
 
-const productStore = useProductStore();
-const { refresh, pending } = useAsyncData("products", async () => productStore.fetchProducts());
+watch(filters, () => {
 
-watch(
-  () => productStore.activeFilters,
-  () => {
-    refresh();
-    console.log("I'm watching you productStore.activeFilters 👀");
+  const pushFilters = JSON.parse(JSON.stringify(filters.value));
+
+  for (let v in pushFilters) {
+    if (!pushFilters[v]) delete pushFilters[v];
   }
-);
+
+  useRouter().push({query: pushFilters});
+  productStore.fetchProducts();
+}, { deep: true });
 
 </script>
 <template>
-  {{pending}}
   <div class="filters-wrapper flex gap-2 items-center">
     <div class="form-control">
       <label class="label" for="search">

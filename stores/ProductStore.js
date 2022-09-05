@@ -2,7 +2,8 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNuxtApp } from 'nuxt/app';
 export const useProductStore = defineStore("ProductStore", {
   state: () => {
-    // const route = useRoute();
+    const route = useRoute();
+
     return {
       /**
        * The listing of all the products
@@ -13,9 +14,9 @@ export const useProductStore = defineStore("ProductStore", {
        * Different ways of fetching the listing of products (filters, order, search)
        */
       filters: {
-        "fields.heatLevel": "",
-        order: "",
-        query: "",
+        "fields.heatLevel": route.query['fields.heatLevel'] || '',
+        order: route.query.order || '',
+        query: route.query.query || '',
       },
 
       /**
