@@ -1,7 +1,9 @@
 <script setup>
 import * as marked from "marked";
+
 const route = useRoute();
 const productStore = useProductStore();
+const cartStore = useCartStore();
 
 const { data: product } = await useAsyncData(
   `product${route.params.id}`,
@@ -20,6 +22,7 @@ const description = computed(() =>
 );
 
 function handleAddToCart(product) {
+  cartStore.addToCart(product);
   useAlertsStore().success(product.fields.name + " added to cart");
 }
 </script>

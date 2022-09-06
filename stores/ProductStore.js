@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useNuxtApp } from 'nuxt/app';
+
 export const useProductStore = defineStore("ProductStore", {
   state: () => {
     const route = useRoute();

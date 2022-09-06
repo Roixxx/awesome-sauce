@@ -1,9 +1,16 @@
 <script setup>
 
+import { debouncedWatch, refDebounced } from '@vueuse/core';
+import { ref } from 'vue';
+
+const { fetchProducts } = useProductStore();
+const loading = ref(false);
+const loadingDebounced = refDebounced(loading, 500);
 const productStore = useProductStore();
 const filters = computed(() => productStore.filters);
 
-watch(filters, () => {
+debouncedWatch(filters, async () => {
+  loading.value = true;
 
   const pushFilters = JSON.parse(JSON.stringify(filters.value));
 
@@ -12,12 +19,14 @@ watch(filters, () => {
   }
 
   useRouter().push({query: pushFilters});
-  productStore.fetchProducts();
-}, { deep: true });
+  await fetchProducts();
+  loading.value = false;
+}, { deep: true, debounce: 200 });
 
 </script>
 <template>
   <div class="filters-wrapper flex gap-2 items-center">
+    <AppSpinner style="transform: translateY(15px)" v-if="loadingDebounced"/>
     <div class="form-control">
       <label class="label" for="search">
         <span class="label-text">Search</span>
