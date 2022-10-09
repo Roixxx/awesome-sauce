@@ -39,12 +39,12 @@ export function useDeskree() {
     onAuthStateChange(callback) {
       onAuthStateChangeCallbacks.value.push(callback);
     },
-    async signUp({ email, password }) {
+    async signUp({email, password}) {
       // hit signup endpoint on deskree
       const res = await $fetch("/auth/accounts/signup", {
         method: "POST",
         baseURL,
-        body: { email, password },
+        body: {email, password},
       });
       const user = res.data;
 
@@ -67,12 +67,12 @@ export function useDeskree() {
       initUser(user);
     },
 
-    async login({ email, password }) {
+    async login({email, password}) {
       // call login endpoint
       const res = await $fetch("/auth/accounts/sign-in/email", {
         baseURL,
         method: "POST",
-        body: { email, password },
+        body: {email, password},
       });
 
       // save user id and token to local storage
@@ -128,11 +128,23 @@ export function useDeskree() {
    * Reviews functions exposed from the composable
    */
   const reviews = {
-    get(productId) {
-      // make request to get reviews for a product here
+    async get(productId) {
+      const where = [
+        {
+          attribute: "product_id",
+          operator: "=",
+          value: productId,
+        },
+      ];
+      return dbRestRequest(`/reviews?where=${JSON.stringify(where)}`);
     },
-    submit({ text, rating, title, product_id }) {
-      // make request to add a new review here
+    async submit({title, text, product_id, rating}) {
+      return dbRestRequest('reviews', 'POST', {
+        title,
+        text,
+        product_id,
+        rating: Number(rating),
+      })
     },
   };
 
@@ -164,25 +176,22 @@ export function useDeskree() {
 
   function integrationsRestRequest(endpoint, method = "GET", body) {
     endpoint = endpoint.replace(/^\//, "");
-    return authorizedRestRequest(`/integrations/${endpoint}`, method, body);
+    return restRequest(`/integrations/${endpoint}`, method, body);
   }
 
   function dbRestRequest(endpoint, method = "GET", body) {
     endpoint = endpoint.replace(/^\//, "");
-    return authorizedRestRequest(`/rest/collections/${endpoint}`, method, body);
+    return restRequest(`/rest/collections/${endpoint}`, method, body);
   }
 
-  function authorizedRestRequest(endpoint, method = "GET", body) {
+  function restRequest(endpoint, method = "GET", body) {
     endpoint = endpoint.replace(/^\//, "");
     const options = {
       baseURL,
       method,
-      headers: {
-        Authorization: `Bearer ${tokenInLocalStorage.value}`,
-      },
     };
     if (body && method !== "GET") options.body = body;
-    return $fetch(endpoint, options);
+    return $fetch(encodeURIComponent(endpoint), options);
   }
 
   return {

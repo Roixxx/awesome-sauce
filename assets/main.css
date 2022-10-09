@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --padding-card: 16px;
+    --fk-max-width-input: 100% !important;
+}
+
