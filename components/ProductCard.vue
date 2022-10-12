@@ -9,12 +9,13 @@ defineProps<{
     class="block product-card"
     :to="{ name: 'products-id', params: { id: product.sys.id } }"
   >
-    <div class="card h-full bg-base-100 shadow-xl relative">
+    <div class="card h-full bg-base-100 shadow-xl border relative">
       <div class="absolute top-0 right-0 p-5">
         <ProductHeat :heatLevel="product.fields.heatLevel" />
       </div>
       <figure>
         <img
+          class="p-3"
           :src="product.fields.image[0].fields?.file.url"
           :alt="product.fields.image[0].fields?.file.description"
         />

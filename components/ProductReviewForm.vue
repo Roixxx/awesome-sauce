@@ -50,7 +50,7 @@
 <script setup>
 import { ref } from 'vue';
 import { reset } from '@formkit/vue';
-defineEmits(['submitReview']);
+const emit = defineEmits(['reviewSent']);
 const deskree = useDeskree();
 const props = defineProps({
   productId: {
@@ -64,10 +64,14 @@ const stars = ref(5);
 const modal = ref(null);
 
 const submitReview = async (data) => {
-  await deskree.reviews.submit({...data, product_id: props.productId});
-  modal.checked = false;
+  await deskree.reviews.submit({...data, product_id: props.productId})
+    .catch(e => e);
+
+  modal.value.checked = false;
+
   useAlertsStore().success("Review sent");
   reset('reviewForm');
+  emit('reviewSent');
 }
 
 </script>

@@ -27,16 +27,16 @@ function handleAddToCart(product) {
 }
 </script>
 <template>
-  <div class="mt-10 max-w-6xl mx-auto mb-16 sm:mb-20">
+  <div class="mt-16 container">
     <div v-if="product">
       <div class="sm:flex">
 
         <img
-          class="px-5 h-80 object-contain sm:w-1/3 mx-auto mb-4 md:sticky top-3"
+          class="sm:pr-5 h-80 object-contain sm:w-1/3 mx-auto mb-4 md:sticky top-24"
           :src="product?.fields.image[0].fields?.file.url"
           :alt="product?.fields.image[0].fields?.file.description"
         />
-        <div class="px-5 sm:pl-0 sm:w-2/3">
+        <div class="sm:w-2/3">
           <h1 class="text-2xl mb-2">{{ product?.fields.name }}</h1>
           <h2 class="mb-1">
             <ProductPrice :price="product.fields.price" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="m-10">
+  <div class="mt-16 container">
     <h1 class="text-3xl mb-5 font-bold">Your Cart</h1>
     <div class="md:flex w-full">
       <div class="md:w-3/4">
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <div class="md:w-1/4 pl-5">
+      <div class="md:w-1/4 md:pl-5 mt-10 md:mt-0">
         <div class="card bg-slate-50">
           <div class="card-body">
             <ul>
@@ -109,12 +109,23 @@
 
 <script setup>
 
+import { useCartStore } from '../stores/CartStore';
+
 const selected = ref([]);
 const cartStore = useCartStore();
 const checkedAll = computed(() => selected.value.length === cartStore.items.length);
 
 async function handleCheckout() {
-  console.log("checking out");
+  const res = await $fetch('/api/cart', {
+    method: 'POST',
+    body: {
+      products: cartStore.items.map(item => ({
+        id: item.item.sys.id,
+        quantity: item.amount,
+      })),
+    },
+  });
+  window.location.href = res.url;
 }
 
 function handleCheckAll(e) {

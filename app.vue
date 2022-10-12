@@ -6,5 +6,6 @@
       <NuxtPage />
     </NuxtLayout>
     <TheAlerts />
+    <TheFooter/>
   </div>
 </template>

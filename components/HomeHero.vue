@@ -12,10 +12,6 @@
           <span style="transform: scaleX(-1)" class="inline-block">📢</span> Get
           your hot sauce!
         </h1>
-        <p class="py-6">
-          Vue.js Forge is hot... and we've got the sauce to prove it!
-        </p>
-        <button class="btn btn-primary">Get Started</button>
       </div>
     </div>
   </div>

@@ -26,7 +26,7 @@
     </ul>
     <div v-else-if="!loading">No reviews yet</div>
 
-    <ProductReviewForm :productId="productId"/>
+    <ProductReviewForm :productId="productId" @reviewSent="loadReviews"/>
   </div>
 </template>
 
@@ -49,7 +49,6 @@ async function loadReviews() {
   loading.value = true;
   const res = await deskree.reviews.get(props.productId);
   reviews.value = res.data.map(item => item.attributes);
-
   loading.value = false;
 }
 loadReviews();

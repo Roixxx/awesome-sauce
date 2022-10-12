@@ -10,6 +10,18 @@ module.exports = {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
   ],
+  theme: {
+    screens: {
+      sm: '575px',
+      md: '768px',
+      lg: '976px',
+      xl: '1200px',
+    },
+    container: {
+      padding: '1rem',
+      center: true,
+    },
+  },
   safelist: [
     "alert-success",
     "alert-warning",

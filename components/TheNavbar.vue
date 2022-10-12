@@ -1,19 +1,21 @@
 <script setup>
 
 const { siteName } = useAppConfig();
-const deskree = useDeskree();
 const cartStore = useCartStore();
-
+const dropdown = ref(null);
+function closeDropdown () {
+  document.activeElement?.blur()
+}
 </script>
 <template>
-  <div class="navbar bg-base-100 shadow-md">
-    <div class="container mx-auto">
+  <div class="navbar bg-base-100 shadow-md sticky top-0 bg-white z-10">
+    <div class="container">
       <div class="flex-1">
-        <NuxtLink class="btn btn-ghost normal-case text-xl" to="/">{{siteName}}</NuxtLink>
+        <NuxtLink class="btn btn-ghost normal-case text-xl -ml-4" to="/">{{siteName}}</NuxtLink>
       </div>
       <!-- Right Side -->
       <div class="flex-none">
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-end" ref="dropdown">
           <CartIcon :loading="false" :count="cartStore.totalCount" />
           <div
             tabindex="0"
@@ -23,7 +25,7 @@ const cartStore = useCartStore();
               <span class="font-bold text-lg">{{ cartStore.totalCount }} Items</span>
               <span class="text-info">Subtotal: <ProductPrice :price="cartStore.subTotalCount" /></span>
               <div class="card-actions">
-                <NuxtLink :to="{ name: 'cart' }">
+                <NuxtLink :to="{ name: 'cart' }" @click="closeDropdown">
                   <button class="btn btn-primary btn-block">View cart</button>
                 </NuxtLink>
               </div>
