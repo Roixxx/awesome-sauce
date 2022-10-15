@@ -1,11 +1,11 @@
+import {useLocalStorage} from "@vueuse/core";
+import {skipHydrate} from "pinia";
+
 export const useCartStore = defineStore("CartStore", () => {
   // state
-  let items = ref([] as any[]);
-  const deskree = useDeskree();
+  const LocalStorageCart = useLocalStorage('cart', []);
 
-  watch(items, () => {
-    deskree.user.updateCart(items.value)
-  }, { deep: true })
+  const items = ref(LocalStorageCart.value as any[]);
 
   // getters
   const totalCount = computed(() => items.value.reduce((acc, item) => acc + item.amount, 0));
@@ -25,21 +25,28 @@ export const useCartStore = defineStore("CartStore", () => {
     } else {
       items.value.push({ item, amount: 1 });
     }
+    localStorage.setItem('cart', JSON.stringify(items.value));
   }
 
   function removeFromCart(idArr: number[]) {
     items.value = items.value.filter(item => !idArr.includes(item.item.sys.id));
   }
 
+  function clearCart() {
+    items.value = [];
+    LocalStorageCart.value = [];
+  }
+
   // output
   return {
-    items,
+    items: skipHydrate(items),
     totalCount,
     subTotalCount,
     taxTotal,
     total,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    clearCart
   }
 })
 
