@@ -1,6 +1,6 @@
 <script setup>
 const productStore = useProductStore();
-useAsyncData("products", async () => productStore.fetchProducts());
+await useAsyncData("products", async () => await productStore.fetchProducts());
 </script>
 <template>
   <div>
