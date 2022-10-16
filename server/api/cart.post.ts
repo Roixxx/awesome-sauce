@@ -3,7 +3,7 @@ import Stripe from "stripe";
 export default defineEventHandler( async (e) => {
   const stripe = new Stripe(useRuntimeConfig().stripeSecret, {} as any);
   const body = await useBody(e);
-  console.log(body)
+
   const productsFromStripe = await stripe.products.list({
     ids: body.products.map(product => product.id),
   });
@@ -14,8 +14,8 @@ export default defineEventHandler( async (e) => {
   }));
 
   return await stripe.checkout.sessions.create({
-    success_url: 'http://localhost:3000/checkout/success',
-    cancel_url: 'http://localhost:3000/cart',
+    success_url: `${body.url}/checkout/success`,
+    cancel_url: `${body.url}/cart`,
     line_items,
     mode: 'payment',
   });

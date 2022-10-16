@@ -128,8 +128,10 @@ async function handleCheckout() {
         id: item.item.sys.id,
         quantity: item.amount,
       })),
+      url: window.location.origin
     },
   });
+
   window.location.href = res.url;
 }
 

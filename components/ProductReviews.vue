@@ -11,7 +11,7 @@
 
     <AppSpinner style="transform: translateY(15px)" v-if="loading"/>
 
-    <ul class="flex flex-col gap-4" v-if="reviews.length">
+    <ul class="flex flex-col gap-4" v-if="reviews?.length">
       <li v-for="review in reviews" class="card bg-base-100 border">
         <div class="card-body">
           <div class="flex items-center flex-wrap">
@@ -24,6 +24,7 @@
         </div>
       </li>
     </ul>
+    <div v-else-if="!reviews">Error loading. Try again later</div>
     <div v-else-if="!loading">No reviews yet</div>
 
     <ProductReviewForm :productId="productId" @reviewSent="loadReviews"/>
@@ -47,8 +48,8 @@ const props = defineProps({
 const reviews = ref([]);
 async function loadReviews() {
   loading.value = true;
-  const res = await deskree.reviews.get(props.productId);
-  reviews.value = res.data.map(item => item.attributes);
+  const res = await deskree.reviews.get(props.productId).catch(() => null);
+  reviews.value = res?.data.map(item => item.attributes);
   loading.value = false;
 }
 loadReviews();
